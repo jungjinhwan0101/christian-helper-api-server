@@ -7,5 +7,5 @@ class UserDataBaseRepository:
         return ORMUser.objects.create_user(username, password)
 
     @classmethod
-    def find_by_id(cls, user_id):
-        return ORMUser.objects.get(id=user_id)
+    def find(cls, filters):
+        return ORMUser.objects.filter(**filters)
