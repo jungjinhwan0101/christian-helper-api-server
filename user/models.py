@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
+from user.managers import ORMUserManager
 
 
 class ORMUser(AbstractBaseUser):
@@ -16,3 +17,4 @@ class ORMUser(AbstractBaseUser):
         },
     )
     USERNAME_FIELD = 'username'
+    objects = ORMUserManager()
