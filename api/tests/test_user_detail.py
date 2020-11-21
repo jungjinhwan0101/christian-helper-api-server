@@ -21,3 +21,11 @@ class UserJoinTest(TestCase):
         assert response.status_code == 400
         result = response.json()
         assert result['detail'] == '유저가 존재하지 않습니다.'
+
+    def test_user_get_validation(self):
+        response = self.client.get(f'/api/users/wrong/')
+        assert response.status_code == 404
+
+    def test_user_get_validation2(self):
+        response = self.client.get(f'/api/users/-1/')
+        assert response.status_code == 404
