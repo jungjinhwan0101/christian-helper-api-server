@@ -126,3 +126,10 @@ STATIC_URL = '/static/'
 # 로그인 ACCESS_TOKEN 암/복호화에 사용되는 시크릿키
 # 키 생성 snippet : from cryptography.fernet import Fernet; Fernet.generate_key()
 USER_ACCESS_TOKEN_SECRET_KEY = b'UvsrkqZaZlqryzvCKFjmIVCfKzsuNgZpf7A39Kaein0='
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'user.authentications.AccessTokenAuthentication',
+    ]
+}

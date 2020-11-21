@@ -1,19 +1,27 @@
-from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from api.views.base import BaseView
 from user.domain.entities import User
 
 
+class UserDetailPermission(IsAuthenticated):
+    def has_permission(self, request, view):
+        if super().has_permission(request, view):
+            return view.kwargs['pk'] == request.user.id
+        return False
+
+    def has_object_permission(self, request, view, obj):
+        return super().has_object_permission(request, view, obj)
+
+
 class UserDetailView(BaseView):
     user_service_factory = None
+    permission_classes = [UserDetailPermission, ]
 
     def get(self, request, pk, *args, **kwargs):
         user_service = self.user_service_factory.get()
-        try:
-            user = user_service.find_by_id(pk)
-        except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
+        user = user_service.find_by_id(pk)
+        self.check_object_permissions(self.request, user)
         user_entity = User.convert_repo_model_to_entity(user)
         return Response(user_entity.to_dict(), status=status.HTTP_200_OK)

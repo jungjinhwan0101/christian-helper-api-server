@@ -1,7 +1,3 @@
-import json
-from cryptography.fernet import Fernet
-
-
 class UserService:
     def __init__(self, repository):
         self.repository = repository
