@@ -1,5 +1,6 @@
 Django<3.2
 djangorestframework<3.13
+cryptography==3.2.1
 
 pytest
 pytest-django

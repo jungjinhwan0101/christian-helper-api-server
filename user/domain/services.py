@@ -9,3 +9,7 @@ class UserService:
     def find_by_id(self, user_id):
         repo_user = self.repository.find(filters={'id': user_id}).get()
         return repo_user
+
+    def find_by_username(self, username):
+        repo_user = self.repository.find(filters={'username': username}).get()
+        return repo_user
