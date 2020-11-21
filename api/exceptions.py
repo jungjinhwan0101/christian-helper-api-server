@@ -1,2 +1,2 @@
-class RequireInputError(Exception):
+class ValidationError(Exception):
     pass
