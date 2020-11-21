@@ -1,9 +1,9 @@
-from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.response import Response
 from api.exceptions import ValidationError
 from api.views.base import BaseView
+from base.token import encrypt_access_token
 from user.domain.entities import User
 
 
@@ -27,6 +27,6 @@ class UserLoginView(BaseView):
         result = {}
         result.update(user_entity.to_dict())
         result.update({
-            'access_token': user_entity.generate_access_token(secret_key=settings.USER_ACCESS_TOKEN_SECRET_KEY)
+            'access_token': encrypt_access_token(user_entity.get_token_payload())
         })
         return Response(result, status=status.HTTP_200_OK)

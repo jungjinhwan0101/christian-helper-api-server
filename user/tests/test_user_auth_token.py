@@ -3,6 +3,7 @@ from django.conf import settings
 from django.test import TestCase
 from cryptography.fernet import Fernet
 
+from base.token import encrypt_access_token, decrypt_access_token
 from user.domain.entities import User
 from user.domain.factories import UserServiceFactory
 
@@ -42,14 +43,14 @@ class UserAuthTokenTest(TestCase):
         user_service = UserServiceFactory.get()
         repo_user = user_service.create_user(username='test1')
         user_entity = User.convert_repo_model_to_entity(repo_user)
-        token = user_entity.generate_access_token(secret_key=settings.USER_ACCESS_TOKEN_SECRET_KEY)
+        token = encrypt_access_token(user_entity.get_token_payload())
         assert token
-        assert user_entity.check_access_token(token, secret_key=settings.USER_ACCESS_TOKEN_SECRET_KEY) is True
+        assert decrypt_access_token(token) == user_entity.get_token_payload()
         user_entity.id = 2
-        assert user_entity.check_access_token(token, secret_key=settings.USER_ACCESS_TOKEN_SECRET_KEY) is False
+        assert decrypt_access_token(token) != user_entity.get_token_payload()
         user_entity.id = 1
-        assert user_entity.check_access_token(token, secret_key=settings.USER_ACCESS_TOKEN_SECRET_KEY) is True
+        assert decrypt_access_token(token) == user_entity.get_token_payload()
         user_entity.username = 'test2'
-        assert user_entity.check_access_token(token, secret_key=settings.USER_ACCESS_TOKEN_SECRET_KEY) is False
+        assert decrypt_access_token(token) != user_entity.get_token_payload()
         user_entity.username = 'test1'
-        assert user_entity.check_access_token(token, secret_key=settings.USER_ACCESS_TOKEN_SECRET_KEY) is True
+        assert decrypt_access_token(token) == user_entity.get_token_payload()
