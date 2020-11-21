@@ -4,7 +4,7 @@ from django.contrib.auth.validators import UnicodeUsernameValidator
 from django.utils.translation import gettext_lazy as _
 
 
-class User(AbstractBaseUser):
+class ORMUser(AbstractBaseUser):
     username = models.CharField(
         _('username'),
         max_length=150,
