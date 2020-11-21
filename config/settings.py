@@ -122,3 +122,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+# 로그인 ACCESS_TOKEN 암/복호화에 사용되는 시크릿키
+# 키 생성 snippet : from cryptography.fernet import Fernet; Fernet.generate_key()
+USER_ACCESS_TOKEN_SECRET_KEY = b'UvsrkqZaZlqryzvCKFjmIVCfKzsuNgZpf7A39Kaein0='

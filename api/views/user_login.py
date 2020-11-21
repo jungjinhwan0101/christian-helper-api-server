@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.response import Response
@@ -23,4 +24,9 @@ class UserLoginView(BaseView):
             raise ValidationError('패스워드가 일치하지 않습니다.')
 
         user_entity = User.convert_repo_model_to_entity(user)
-        return Response(user_entity.to_dict(), status=status.HTTP_200_OK)
+        result = {}
+        result.update(user_entity.to_dict())
+        result.update({
+            'access_token': user_entity.generate_access_token(secret_key=settings.USER_ACCESS_TOKEN_SECRET_KEY)
+        })
+        return Response(result, status=status.HTTP_200_OK)

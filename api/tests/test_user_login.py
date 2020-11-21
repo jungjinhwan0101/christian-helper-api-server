@@ -19,6 +19,7 @@ class UserLoginTest(TestCase):
         result = response.json()
         assert result['id'] == user.id
         assert result['username'] == 'test1'
+        assert result['access_token']
         assert 'password' not in result
 
     def test_user_login_validation(self):
