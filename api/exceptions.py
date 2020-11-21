@@ -1,0 +1,2 @@
+class RequireInputError(Exception):
+    pass

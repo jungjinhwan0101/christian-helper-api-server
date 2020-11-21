@@ -1,1 +1,1 @@
-from .user_join_view import * # noqa
+from .user_join import * # noqa
