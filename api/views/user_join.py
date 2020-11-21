@@ -8,8 +8,8 @@ class UserJoinView(BaseView):
     user_service_factory = None
 
     def post(self, request, *args, **kwargs):
-        username = self.get_data(request, 'username')
-        password = self.get_data(request, 'password')
+        username = self.get_data('username')
+        password = self.get_data('password')
 
         user_service = self.user_service_factory.get()
         user = user_service.create_user(username=username, password=password)

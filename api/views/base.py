@@ -6,8 +6,8 @@ from api.exceptions import RequireInputError
 
 
 class BaseView(APIView):
-    def get_data(self, request, field_name, require=True):
-        value = request.data.get(field_name, None)
+    def get_data(self, field_name, require=True):
+        value = self.request.data.get(field_name, None)
         if require and not value:
             raise RequireInputError(f'{field_name} 은 필수 입력값 입니다.')
         return value
