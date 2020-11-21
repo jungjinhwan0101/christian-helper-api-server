@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from user.domain.entities import User
 
 
 class UserJoinView(APIView):
@@ -12,8 +13,5 @@ class UserJoinView(APIView):
             username=request.data.get('username', None),
             password=request.data.get('password', None)
         )
-        data = {
-            'id': user.id,
-            'username': user.username
-        }
-        return Response(data, status=status.HTTP_201_CREATED)
+        user_entity = User.convert_repo_model_to_entity(user)
+        return Response(user_entity.to_dict(), status=status.HTTP_201_CREATED)
