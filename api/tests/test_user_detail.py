@@ -2,7 +2,6 @@ from django.test import TestCase
 
 from user.domain.services import user_service
 from user.token import UserAccessToken
-from user.domain.entities import User
 
 
 class UserJoinTest(TestCase):
