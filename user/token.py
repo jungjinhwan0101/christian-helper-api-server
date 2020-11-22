@@ -8,36 +8,38 @@ from rest_framework import exceptions
 from user.domain.services import user_service
 
 
-def _encrypt_access_token(data):
-    cipher = Fernet(settings.USER_ACCESS_TOKEN_SECRET_KEY)
-    token_payload = json.dumps(data).encode()
-    return cipher.encrypt(token_payload).decode()
+class UserAccessToken:
+    @classmethod
+    def _encrypt_access_token(cls, data):
+        cipher = Fernet(settings.USER_ACCESS_TOKEN_SECRET_KEY)
+        token_payload = json.dumps(data).encode()
+        return cipher.encrypt(token_payload).decode()
 
+    @classmethod
+    def _get_token_payload(cls, repo_user):
+        return {
+            'id': repo_user.id,
+            'username': repo_user.username
+        }
 
-def _get_token_payload(repo_user):
-    return {
-        'id': repo_user.id,
-        'username': repo_user.username
-    }
+    @classmethod
+    def decrypt_access_token(cls, access_token):
+        cipher = Fernet(settings.USER_ACCESS_TOKEN_SECRET_KEY)
+        token_payload = cipher.decrypt(access_token.encode()).decode()
+        return json.loads(token_payload)
 
+    @classmethod
+    def obtain_access_token(cls, repo_user):
+        return UserAccessToken._encrypt_access_token(cls._get_token_payload(repo_user))
 
-def decrypt_access_token(access_token):
-    cipher = Fernet(settings.USER_ACCESS_TOKEN_SECRET_KEY)
-    token_payload = cipher.decrypt(access_token.encode()).decode()
-    return json.loads(token_payload)
-
-
-def obtain_access_token(repo_user):
-    return _encrypt_access_token(_get_token_payload(repo_user))
-
-
-def get_user_by_access_token(access_token):
-    if not access_token:
-        return None
-    token_payload = decrypt_access_token(access_token)
-    try:
-        repo_user = user_service.find_by_id(token_payload['id'])
-    except ObjectDoesNotExist:
-        raise exceptions.AuthenticationFailed(_('Invalid Token.'))
-    is_valid = decrypt_access_token(access_token) == _get_token_payload(repo_user)
-    return repo_user if is_valid else None
+    @classmethod
+    def get_user_by_access_token(cls, access_token):
+        if not access_token:
+            return None
+        token_payload = cls.decrypt_access_token(access_token)
+        try:
+            repo_user = user_service.find_by_id(token_payload['id'])
+        except ObjectDoesNotExist:
+            raise exceptions.AuthenticationFailed(_('Invalid Token.'))
+        is_valid = cls.decrypt_access_token(access_token) == cls._get_token_payload(repo_user)
+        return repo_user if is_valid else None

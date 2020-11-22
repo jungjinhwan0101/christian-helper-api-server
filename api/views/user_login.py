@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from api.exceptions import ValidationError
 from api.views.base import BaseView
 from user.domain.services import user_service
-from user.token import obtain_access_token
+from user.token import UserAccessToken
 from user.domain.entities import User
 
 
@@ -26,6 +26,6 @@ class UserLoginView(BaseView):
         result = {}
         result.update(user_entity.to_dict())
         result.update({
-            'access_token': obtain_access_token(repo_user)
+            'access_token': UserAccessToken.obtain_access_token(repo_user)
         })
         return Response(result, status=status.HTTP_200_OK)

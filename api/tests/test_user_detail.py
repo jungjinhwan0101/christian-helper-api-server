@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from user.domain.services import user_service
-from user.token import obtain_access_token
+from user.token import UserAccessToken
 from user.domain.entities import User
 
 
@@ -11,7 +11,7 @@ class UserJoinTest(TestCase):
         self.user_id = repo_user.id
         user_entity = User.convert_repo_model_to_entity(repo_user)
         self.auth_token_header = {
-            'X-HTTP-ACCESS-TOKEN': obtain_access_token(repo_user)
+            'X-HTTP-ACCESS-TOKEN': UserAccessToken.obtain_access_token(repo_user)
         }
 
     def test_user_get(self):
