@@ -1,15 +1,11 @@
 from rest_framework import status
 from rest_framework.response import Response
 from api.views.base import BaseView
-from user.domain.services import user_service
+from user.domain.application_services import UserJoinCommand
 
 
 class UserJoinView(BaseView):
-
     def post(self, request, *args, **kwargs):
-        username = self.get_data('username')
-        password = self.get_data('password')
-
-        user = user_service.create_user(username=username, password=password)
+        _, user = UserJoinCommand().execute(data=request.data)
         data = {'id': user.id, 'username': user.username}
         return Response(data, status=status.HTTP_201_CREATED)
