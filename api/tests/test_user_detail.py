@@ -1,6 +1,5 @@
-from django.conf import settings
 from django.test import TestCase
-from base.token import encrypt_access_token
+from user.token import obtain_access_token
 from user.domain.entities import User
 from user.domain.factories import UserServiceFactory
 
@@ -12,7 +11,7 @@ class UserJoinTest(TestCase):
         self.user_id = repo_user.id
         user_entity = User.convert_repo_model_to_entity(repo_user)
         self.auth_token_header = {
-            'X-HTTP-ACCESS-TOKEN': encrypt_access_token(user_entity.get_token_payload())
+            'X-HTTP-ACCESS-TOKEN': obtain_access_token(repo_user)
         }
 
     def test_user_get(self):

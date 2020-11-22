@@ -3,8 +3,7 @@ from django.conf import settings
 from django.test import TestCase
 from cryptography.fernet import Fernet
 
-from base.token import encrypt_access_token, decrypt_access_token
-from user.domain.entities import User
+from user.token import obtain_access_token, get_user_by_access_token
 from user.domain.factories import UserServiceFactory
 
 
@@ -39,18 +38,9 @@ class UserAuthTokenTest(TestCase):
         # 복호화 된 데이터 체크
         assert json.loads(decoded_data) == json.loads(decoded_data2) == data
 
-    def test_user_service_get_access_token(self):
+    def test_check_access_token(self):
         user_service = UserServiceFactory.get()
         repo_user = user_service.create_user(username='test1')
-        user_entity = User.convert_repo_model_to_entity(repo_user)
-        token = encrypt_access_token(user_entity.get_token_payload())
+        token = obtain_access_token(repo_user)
         assert token
-        assert decrypt_access_token(token) == user_entity.get_token_payload()
-        user_entity.id = 2
-        assert decrypt_access_token(token) != user_entity.get_token_payload()
-        user_entity.id = 1
-        assert decrypt_access_token(token) == user_entity.get_token_payload()
-        user_entity.username = 'test2'
-        assert decrypt_access_token(token) != user_entity.get_token_payload()
-        user_entity.username = 'test1'
-        assert decrypt_access_token(token) == user_entity.get_token_payload()
+        assert get_user_by_access_token(token) == repo_user

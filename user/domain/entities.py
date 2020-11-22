@@ -12,9 +12,3 @@ class User:
             'id': self.id,
             'username': self.username
         }
-
-    def get_token_payload(self):
-        return {
-            'id': self.id,
-            'username': self.username
-        }
