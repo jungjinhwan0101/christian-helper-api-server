@@ -1,12 +1,12 @@
 from django.test import TestCase
+
+from user.domain.services import user_service
 from user.token import obtain_access_token
 from user.domain.entities import User
-from user.domain.factories import UserServiceFactory
 
 
 class UserJoinTest(TestCase):
     def setUp(self):
-        user_service = UserServiceFactory.get()
         repo_user = user_service.create_user(username='test1')
         self.user_id = repo_user.id
         user_entity = User.convert_repo_model_to_entity(repo_user)

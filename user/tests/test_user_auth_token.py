@@ -3,8 +3,8 @@ from django.conf import settings
 from django.test import TestCase
 from cryptography.fernet import Fernet
 
+from user.domain.services import user_service
 from user.token import obtain_access_token, get_user_by_access_token
-from user.domain.factories import UserServiceFactory
 
 
 class UserAuthTokenTest(TestCase):
@@ -39,7 +39,6 @@ class UserAuthTokenTest(TestCase):
         assert json.loads(decoded_data) == json.loads(decoded_data2) == data
 
     def test_check_access_token(self):
-        user_service = UserServiceFactory.get()
         repo_user = user_service.create_user(username='test1')
         token = obtain_access_token(repo_user)
         assert token

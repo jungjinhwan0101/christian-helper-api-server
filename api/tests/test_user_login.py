@@ -1,11 +1,10 @@
 from django.test import TestCase
 
-from user.domain.factories import UserServiceFactory
+from user.domain.services import user_service
 
 
 class UserLoginTest(TestCase):
     def test_user_login(self):
-        user_service = UserServiceFactory.get()
         user = user_service.create_user(username='test1', password='test2')
 
         response = self.client.post(
@@ -23,7 +22,6 @@ class UserLoginTest(TestCase):
         assert 'password' not in result
 
     def test_user_login_validation(self):
-        user_service = UserServiceFactory.get()
         user = user_service.create_user(username='test1', password='test2')
 
         response = self.client.post(
@@ -38,7 +36,6 @@ class UserLoginTest(TestCase):
         assert result['detail'] == '패스워드가 일치하지 않습니다.'
 
     def test_user_login_validation2(self):
-        user_service = UserServiceFactory.get()
         user_service.create_user(username='test1', password='test2')
 
         response = self.client.post(

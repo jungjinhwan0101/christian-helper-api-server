@@ -4,7 +4,8 @@ from django.utils.translation import gettext_lazy as _
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import exceptions
-from user.domain.factories import UserServiceFactory
+
+from user.domain.services import user_service
 
 
 def _encrypt_access_token(data):
@@ -34,7 +35,6 @@ def get_user_by_access_token(access_token):
     if not access_token:
         return None
     token_payload = decrypt_access_token(access_token)
-    user_service = UserServiceFactory.get()
     try:
         repo_user = user_service.find_by_id(token_payload['id'])
     except ObjectDoesNotExist:
