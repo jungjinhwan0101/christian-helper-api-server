@@ -9,7 +9,6 @@ class UserJoinTest(TestCase):
     def setUp(self):
         repo_user = user_service.create_user(username='test1')
         self.user_id = repo_user.id
-        user_entity = User.convert_repo_model_to_entity(repo_user)
         self.auth_token_header = {
             'X-HTTP-ACCESS-TOKEN': UserAccessToken.obtain_access_token(repo_user)
         }
