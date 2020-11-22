@@ -18,3 +18,9 @@ class ORMUser(AbstractBaseUser):
     )
     USERNAME_FIELD = 'username'
     objects = ORMUserManager()
+
+    def _get_token_payload(self):
+        return {
+            'id': self.id,
+            'username': self.username
+        }

@@ -16,13 +16,6 @@ class AccessToken:
         return cipher.encrypt(token_payload).decode()
 
     @classmethod
-    def _get_token_payload(cls, repo_user):
-        return {
-            'id': repo_user.id,
-            'username': repo_user.username
-        }
-
-    @classmethod
     def decrypt_access_token(cls, access_token):
         cipher = Fernet(settings.USER_ACCESS_TOKEN_SECRET_KEY)
         token_payload = cipher.decrypt(access_token.encode()).decode()
@@ -30,7 +23,7 @@ class AccessToken:
 
     @classmethod
     def obtain_access_token(cls, repo_user):
-        return AccessToken._encrypt_access_token(cls._get_token_payload(repo_user))
+        return AccessToken._encrypt_access_token(repo_user._get_token_payload())
 
     @classmethod
     def get_user_by_access_token(cls, access_token):
@@ -41,5 +34,5 @@ class AccessToken:
             repo_user = user_service.find_by_id(token_payload['id'])
         except ObjectDoesNotExist:
             raise exceptions.AuthenticationFailed(_('Invalid Token.'))
-        is_valid = cls.decrypt_access_token(access_token) == cls._get_token_payload(repo_user)
+        is_valid = cls.decrypt_access_token(access_token) == repo_user._get_token_payload()
         return repo_user if is_valid else None
