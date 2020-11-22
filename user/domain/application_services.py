@@ -2,7 +2,6 @@ from abc import ABC
 
 from base.exceptions import ValidationError
 from user.domain.services import user_service
-from user.token import AccessToken
 
 
 class Command(ABC):
@@ -35,6 +34,6 @@ class UserLoginCommand(Command):
             raise ValidationError('패스워드가 일치하지 않습니다.')
         result = {
             'user': user,
-            'access_token': AccessToken.obtain_access_token(user)
+            'access_token': user.access_token.obtain_token()
         }
         return True, result
