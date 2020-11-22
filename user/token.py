@@ -8,7 +8,7 @@ from rest_framework import exceptions
 from user.domain.services import user_service
 
 
-class UserAccessToken:
+class AccessToken:
     @classmethod
     def _encrypt_access_token(cls, data):
         cipher = Fernet(settings.USER_ACCESS_TOKEN_SECRET_KEY)
@@ -30,7 +30,7 @@ class UserAccessToken:
 
     @classmethod
     def obtain_access_token(cls, repo_user):
-        return UserAccessToken._encrypt_access_token(cls._get_token_payload(repo_user))
+        return AccessToken._encrypt_access_token(cls._get_token_payload(repo_user))
 
     @classmethod
     def get_user_by_access_token(cls, access_token):

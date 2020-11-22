@@ -4,7 +4,7 @@ from django.test import TestCase
 from cryptography.fernet import Fernet
 
 from user.domain.services import user_service
-from user.token import UserAccessToken
+from user.token import AccessToken
 
 
 class UserAuthTokenTest(TestCase):
@@ -40,6 +40,6 @@ class UserAuthTokenTest(TestCase):
 
     def test_check_access_token(self):
         repo_user = user_service.create_user(username='test1')
-        token = UserAccessToken.obtain_access_token(repo_user)
+        token = AccessToken.obtain_access_token(repo_user)
         assert token
-        assert UserAccessToken.get_user_by_access_token(token) == repo_user
+        assert AccessToken.get_user_by_access_token(token) == repo_user

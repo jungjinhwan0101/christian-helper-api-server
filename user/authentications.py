@@ -1,6 +1,6 @@
 from rest_framework.authentication import BaseAuthentication
 
-from user.token import UserAccessToken
+from user.token import AccessToken
 
 
 class AccessTokenAuthentication(BaseAuthentication):
@@ -9,5 +9,5 @@ class AccessTokenAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
         access_token = self.get_authorization_header(request)
-        user = UserAccessToken.get_user_by_access_token(access_token)
+        user = AccessToken.get_user_by_access_token(access_token)
         return (user, None) if user else None
