@@ -1,11 +1,10 @@
 from django.test import TestCase
-
-from user.domain.services import user_service
+from user.models import ORMUser
 
 
 class UserJoinTest(TestCase):
     def setUp(self):
-        repo_user = user_service.create_user(username='test1')
+        repo_user = ORMUser.objects.create_user(username='test1')
         self.user_id = repo_user.id
         self.auth_token_header = {
             'X-HTTP-ACCESS-TOKEN': repo_user.access_token.obtain_token()

@@ -1,11 +1,11 @@
 from rest_framework import status
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.generics import GenericAPIView
 
-from base.exceptions import ValidationError
+from api.exceptions import ValidationError
 
 
-class BaseView(APIView):
+class BaseView(GenericAPIView):
     def handle_exception(self, exc):
         try:
             return super().handle_exception(exc)

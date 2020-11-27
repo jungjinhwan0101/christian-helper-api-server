@@ -3,7 +3,7 @@ from django.conf import settings
 from django.test import TestCase
 from cryptography.fernet import Fernet
 
-from user.domain.services import user_service
+from user.models import ORMUser
 
 
 class UserAuthTokenTest(TestCase):
@@ -38,7 +38,7 @@ class UserAuthTokenTest(TestCase):
         assert json.loads(decoded_data) == json.loads(decoded_data2) == data
 
     def test_check_access_token(self):
-        repo_user = user_service.create_user(username='test1')
+        repo_user = ORMUser.objects.create_user(username='test1')
         token = repo_user.access_token.obtain_token()
         assert token
-        assert user_service.get_user_by_access_token(token) == repo_user
+        assert ORMUser.objects.get_user_by_access_token(token) == repo_user

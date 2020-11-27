@@ -2,7 +2,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import status
 from rest_framework.response import Response
 from api.views.base import BaseView
-from user.domain.application_services import UserLoginCommand
+from user.usecases import UserLoginCommand
 
 
 class UserLoginView(BaseView):

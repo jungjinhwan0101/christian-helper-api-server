@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from api.views.base import BaseView
-from user.domain.services import user_service
+from user.models import ORMUser
 
 
 class UserDetailPermission(IsAuthenticated):
@@ -20,7 +20,7 @@ class UserDetailView(BaseView):
     permission_classes = [UserDetailPermission, ]
 
     def get(self, request, pk, *args, **kwargs):
-        user = user_service.find_by_id(pk)
+        user = ORMUser.objects.find_by_id(pk)
         self.check_object_permissions(self.request, user)
         data = {'id': user.id, 'username': user.username}
         return Response(data, status=status.HTTP_200_OK)
